@@ -1,7 +1,7 @@
-#####################################
-# Created on : 4-3-2018				#
-# Created by: Erine Estrella		#
-#####################################
+#########################################
+# Created on : 4-3-2018					#
+# Created by: Erine Estrella			#
+#########################################
 
 #importing modules
 
@@ -64,8 +64,11 @@ class ClientInterface(Cmd):
 	
 	def do_get(self, args):
 		filename = args
+		getCommand = 'get'
 		if filename:
 			print "Now downloading filename : %s from the server..." % filename
+		# still trying to figure out the simpliest way to do this
+		#	self.cmdSocket.send(
 		else:
 			print "Sorry, that was incorrect formatting. Please try again."
 	#def do_put(self, args):
@@ -89,6 +92,17 @@ class ClientInterface(Cmd):
 			createSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 			createSocket.connect((hostAddr, portNum))
 			print "\nConnection to server has been made on port #%s ." % portNum
+		except socket.error as socketError
+			print "There was a Socket Error: %s" % SocketError
+		return createSocket
+
+	def bufferHeader(self, header, size)
+		size = 10
+		header = str(header)
+		# until size is 10 bytes
+		while len(header) < size
+			header = "0" + header
+		return header
 
 
 # run main
