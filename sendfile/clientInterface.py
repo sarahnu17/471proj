@@ -71,7 +71,45 @@ class ClientInterface(Cmd):
 		#	self.cmdSocket.send(
 		else:
 			print "Sorry, that was incorrect formatting. Please try again."
-	#def do_put(self, args):
+			
+	def do_put(self, args):
+		putCommand = 'put'
+		filename = args
+
+                if filename:
+                        
+                        print "Now sending filename: %s to the server..." % filename
+                        
+                        fileOpen = open(filename, "r")
+                        connSock = socket.socket(socket.AF.INET, socket.SOCK_STREAM)
+                        connSock.connect((serverAddr, serverPort))
+			
+			#not sure if this is the correct way to send command to server
+			connSock.send(putCommand)
+                        
+                        bytesSent = 0
+                        fileData = None
+
+                        while True:
+                                fileData = fileOpen.read(65536)
+                                if fileData:
+                                        dataSize = str(len(fileData))
+                                        while len(dataSize) < 10:
+                                                dataSize = "0" + dataSize
+                                                fileData = dataSize + fileData
+                                                bytesSent = 0
+                                                while len(fileData) > bytesSent:
+                                                        bytesSent += connSock.send(fileData[bytesSent:])
+                                else:
+                                        break
+
+                        print "Filename", filename, " with size",  bytesSent, " was sent."
+
+                        connSock.close()
+                        fileOpen.close()
+                else:
+                        print "Sorry, that was incorrect formatting. Please try again."
+	
 	#def do_ls (self, args):
 	def do_quit(self, args):
 		print "Now disconnecting from the server and quiting..."
